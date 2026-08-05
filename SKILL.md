@@ -195,6 +195,6 @@ If you already watched a video this session and the user asks a follow-up, do **
 - Does not use, store, or require any API key — there is no `.env`, no config file, no secrets
 - Does not persist anything outside the working directory and the Hugging Face model cache — clean up the working directory when you're done (Step 5)
 
-**Bundled scripts:** `scripts/watch.py` (entry point), `scripts/download.py` (yt-dlp wrapper), `scripts/frames.py` (ffmpeg frame extraction), `scripts/transcribe.py` (caption parsing), `scripts/whisper.py` (local mlx/openai-whisper transcription), `scripts/setup.py` (preflight + installer)
+**Bundled scripts:** `scripts/watch.py` (entry point), `scripts/download.py` (yt-dlp wrapper), `scripts/frames.py` (ffmpeg frame extraction), `scripts/transcribe.py` (caption parsing), `scripts/local_whisper.py` (local mlx/openai-whisper transcription), `scripts/setup.py` (preflight + installer)
 
 Review scripts before first use to verify behavior.

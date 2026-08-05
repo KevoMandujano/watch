@@ -152,7 +152,7 @@ if __name__ == "__main__":
     import json
 
     if len(sys.argv) < 2:
-        print("usage: whisper.py <video-path> [<audio-out.mp3>] [--backend mlx|openai-whisper]", file=sys.stderr)
+        print("usage: local_whisper.py <video-path> [<audio-out.mp3>] [--backend mlx|openai-whisper]", file=sys.stderr)
         raise SystemExit(2)
 
     video = sys.argv[1]
