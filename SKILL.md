@@ -81,6 +81,7 @@ Optional flags:
 - `--resolution W` — change frame width in px (default 512; bump to 1024 only if the user needs to read on-screen text)
 - `--fps F` — override auto-fps (clamped to 2 fps max)
 - `--out-dir DIR` — keep working files somewhere specific (default: an auto-generated tmp dir)
+- `--sub-langs LANGS` — comma-separated caption languages to request, in preference order (default `en,en-US,en-GB,en-orig`). For non-English videos, put the video's language first, e.g. `--sub-langs es,es-419,en` — otherwise captions in that language are never fetched and the skill falls back to Whisper unnecessarily
 - `--cookies-from-browser B` — read cookies from a local browser (`chrome`, `firefox`, `safari`, `edge`, `brave`, …) for login-gated sources
 - `--cookies FILE` — path to a Netscape-format `cookies.txt` (alternative to `--cookies-from-browser`)
 - `--whisper mlx|openai-whisper` — force a specific local Whisper engine (default: prefer mlx-whisper, fall back to openai-whisper)
