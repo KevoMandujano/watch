@@ -18,7 +18,8 @@ VIDEO_EXTS = {".mp4", ".mkv", ".webm", ".mov", ".m4v", ".avi", ".flv", ".wmv"}
 
 # yt-dlp subtitle-language selection (see `yt-dlp --sub-langs`). Comma-separated,
 # in preference order; the first language with a downloaded track wins.
-DEFAULT_SUB_LANGS = "en,en-US,en-GB,en-orig"
+# Fork default: Spanish first (upstream defaults to English only).
+DEFAULT_SUB_LANGS = "es,es-419,es-ES,es-orig,en,en-US,en-GB,en-orig"
 
 
 def is_url(source: str) -> bool:

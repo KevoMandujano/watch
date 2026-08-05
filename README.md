@@ -1,5 +1,7 @@
 # /watch — give Claude eyes for video
 
+> **🇪🇸 [Guía en español →](README.es.md)** · This fork of [mathiaschu/watch](https://github.com/mathiaschu/watch) fixes the `openai-whisper` backend on Windows/Linux ([PR #5](https://github.com/mathiaschu/watch/pull/5)), adds a `--sub-langs` flag ([PR #6](https://github.com/mathiaschu/watch/pull/6)), and defaults captions to Spanish-first.
+
 **Let Claude watch a video from almost anywhere — and transcribe it 100% on your machine, no API key.**
 
 Paste a URL (YouTube, Instagram, X/Twitter, Vimeo, TikTok, Loom, and ~1800 more) or a local file, ask a question, and Claude downloads the video, extracts frames, pulls a timestamped transcript, and *reads every frame as an image*. By the time it answers, it has **seen** the video and **heard** the audio.
