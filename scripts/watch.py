@@ -15,7 +15,7 @@ from pathlib import Path
 SCRIPT_DIR = Path(__file__).parent.resolve()
 sys.path.insert(0, str(SCRIPT_DIR))
 
-from download import download, is_url  # noqa: E402
+from download import DEFAULT_SUB_LANGS, download, is_url  # noqa: E402
 from frames import MAX_FPS, auto_fps, auto_fps_focus, extract, format_time, get_metadata, parse_time  # noqa: E402
 from transcribe import filter_range, format_transcript, parse_vtt  # noqa: E402
 from whisper import detect_backend, transcribe_video  # noqa: E402
@@ -45,6 +45,13 @@ def main() -> int:
         type=str,
         default=None,
         help="Path to a Netscape-format cookies.txt file (alternative to --cookies-from-browser).",
+    )
+    ap.add_argument(
+        "--sub-langs",
+        type=str,
+        default=DEFAULT_SUB_LANGS,
+        help="Comma-separated caption languages to request from yt-dlp, in preference order "
+             f"(default: {DEFAULT_SUB_LANGS}). Example: --sub-langs es,es-419,en",
     )
     ap.add_argument(
         "--no-whisper",
@@ -77,6 +84,7 @@ def main() -> int:
         work / "download",
         cookies_from_browser=args.cookies_from_browser,
         cookies_file=args.cookies,
+        sub_langs=args.sub_langs,
     )
     video_path = dl["video_path"]
 

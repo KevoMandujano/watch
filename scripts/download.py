@@ -16,6 +16,10 @@ from urllib.parse import urlparse
 
 VIDEO_EXTS = {".mp4", ".mkv", ".webm", ".mov", ".m4v", ".avi", ".flv", ".wmv"}
 
+# yt-dlp subtitle-language selection (see `yt-dlp --sub-langs`). Comma-separated,
+# in preference order; the first language with a downloaded track wins.
+DEFAULT_SUB_LANGS = "en,en-US,en-GB,en-orig"
+
 
 def is_url(source: str) -> bool:
     if source.startswith("-"):
@@ -41,12 +45,21 @@ def resolve_local(path: str) -> dict:
     }
 
 
-def _pick_subtitle(out_dir: Path) -> Path | None:
+def _pick_subtitle(out_dir: Path, sub_langs: str = DEFAULT_SUB_LANGS) -> Path | None:
     candidates = sorted(out_dir.glob("video*.vtt"))
     if not candidates:
         return None
-    preferred = [c for c in candidates if ".en" in c.name]
-    return preferred[0] if preferred else candidates[0]
+    # Prefer tracks in the order the languages were requested ("es,en" tries
+    # any .es* track first, then .en*), comparing by primary language code.
+    seen: list[str] = []
+    for lang in (l.strip().split("-")[0].lower() for l in sub_langs.split(",") if l.strip()):
+        if not lang or lang in seen:
+            continue
+        seen.append(lang)
+        preferred = [c for c in candidates if f".{lang}" in c.name.lower()]
+        if preferred:
+            return preferred[0]
+    return candidates[0]
 
 
 def _pick_video(out_dir: Path) -> Path | None:
@@ -79,6 +92,7 @@ def download_url(
     out_dir: Path,
     cookies_from_browser: str | None = None,
     cookies_file: str | None = None,
+    sub_langs: str = DEFAULT_SUB_LANGS,
 ) -> dict:
     if shutil.which("yt-dlp") is None:
         raise SystemExit("yt-dlp is not installed. Install with: brew install yt-dlp")
@@ -94,7 +108,7 @@ def download_url(
         "--write-info-json",
         "--write-subs",
         "--write-auto-subs",
-        "--sub-langs", "en,en-US,en-GB,en-orig",
+        "--sub-langs", sub_langs,
         "--sub-format", "vtt",
         "--convert-subs", "vtt",
         "--no-playlist",
@@ -114,7 +128,7 @@ def download_url(
             f"yt-dlp did not produce a video file in {out_dir} (exit {result.returncode})"
         )
 
-    subtitle = _pick_subtitle(out_dir)
+    subtitle = _pick_subtitle(out_dir, sub_langs)
     info_path = out_dir / "video.info.json"
     info: dict = {}
     if info_path.exists():
@@ -143,21 +157,25 @@ def download(
     out_dir: Path,
     cookies_from_browser: str | None = None,
     cookies_file: str | None = None,
+    sub_langs: str = DEFAULT_SUB_LANGS,
 ) -> dict:
     if is_url(source):
-        return download_url(source, out_dir, cookies_from_browser, cookies_file)
+        return download_url(source, out_dir, cookies_from_browser, cookies_file, sub_langs)
     return resolve_local(source)
 
 
 if __name__ == "__main__":
     if len(sys.argv) < 3:
-        print("usage: download.py <url-or-path> <out-dir> [--cookies-from-browser B] [--cookies FILE]", file=sys.stderr)
+        print("usage: download.py <url-or-path> <out-dir> [--cookies-from-browser B] [--cookies FILE] [--sub-langs LANGS]", file=sys.stderr)
         raise SystemExit(2)
     cfb = None
     cf = None
+    sl = DEFAULT_SUB_LANGS
     if "--cookies-from-browser" in sys.argv:
         cfb = sys.argv[sys.argv.index("--cookies-from-browser") + 1]
     if "--cookies" in sys.argv:
         cf = sys.argv[sys.argv.index("--cookies") + 1]
-    result = download(sys.argv[1], Path(sys.argv[2]), cookies_from_browser=cfb, cookies_file=cf)
+    if "--sub-langs" in sys.argv:
+        sl = sys.argv[sys.argv.index("--sub-langs") + 1]
+    result = download(sys.argv[1], Path(sys.argv[2]), cookies_from_browser=cfb, cookies_file=cf, sub_langs=sl)
     print(json.dumps(result, indent=2))

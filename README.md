@@ -98,6 +98,7 @@ If browser extraction keeps fighting you, export the cookies manually (works eve
 | `--max-frames N` | Lower the frame cap for a tighter token budget |
 | `--resolution W` | Frame width in px (default 512; 1024 to read on-screen text) |
 | `--fps F` | Override auto-fps (clamped to 2 fps) |
+| `--sub-langs LANGS` | Caption languages to request, in preference order (default `en,en-US,en-GB,en-orig`; e.g. `es,es-419,en` for Spanish videos) |
 | `--cookies-from-browser B` | Read cookies from a local browser for login-gated sources |
 | `--cookies FILE` | Use a Netscape-format `cookies.txt` instead |
 | `--whisper mlx\|openai-whisper` | Force a specific local engine |
