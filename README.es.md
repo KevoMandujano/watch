@@ -20,7 +20,7 @@
 **1. Clona la skill donde Claude Code busca skills:**
 
 ```powershell
-git clone https://github.com/kevo2703/watch.git "$env:USERPROFILE\.claude\skills\watch"
+git clone https://github.com/KevoMandujano/watch.git "$env:USERPROFILE\.claude\skills\watch"
 ```
 
 **2. Instala las tres dependencias** (si no las tienes):
